@@ -29,18 +29,18 @@ public class MyService implements IMyService {
     private RoleRepo roleRepo;
 
     @Override
-    public ResponseEntity<House> addHouse(MyDto myDto) {
-        if (houseRepo.existsByName(myDto.getHouseName())||inmateRepo.existsByName(myDto.getInmateName()))
+    public ResponseEntity<House> addHouse(HouseDto houseDto, InmateDto inmateDto) {
+        if (houseRepo.existsByName(houseDto.getName())||inmateRepo.existsByName(inmateDto.getName()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         House house = new House();
         Inmate inmate = new Inmate();
 
-        house.setName(myDto.getHouseName());
-        house.setPassword(passwordEncoder.encode(myDto.getHousePassword()));
+        house.setName(houseDto.getName());
+        house.setPassword(passwordEncoder.encode(houseDto.getPassword()));
         house = houseRepo.save(house);
 
-        inmate.setName(myDto.getInmateName());
-        inmate.setPassword(passwordEncoder.encode(myDto.getInmatePassword()));
+        inmate.setName(inmateDto.getName());
+        inmate.setPassword(passwordEncoder.encode(inmateDto.getPassword()));
         Role userRole = roleRepo.findByName("USER").orElse(new Role("USER"));
         Role managerRole = roleRepo.findByName("HOUSEMANAGER").orElse(new Role("HOUSEMANAGER"));
         inmate.setRoles(Arrays.asList(userRole, managerRole));
@@ -51,15 +51,15 @@ public class MyService implements IMyService {
     }
 
     @Override
-    public ResponseEntity<Inmate> addInmate(MyDto myDto) {
-        if (inmateRepo.existsByName(myDto.getInmateName()))
+    public ResponseEntity<Inmate> addInmate(HouseDto houseDto, InmateDto inmateDto) {
+        if (inmateRepo.existsByName(inmateDto.getName()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        House house = houseRepo.findByName(myDto.getHouseName());
-        if (!passwordEncoder.matches(myDto.getHousePassword(), house.getPassword()))
+        House house = houseRepo.findByName(houseDto.getName());
+        if (!passwordEncoder.matches(houseDto.getPassword(), house.getPassword()))
             return new ResponseEntity<>((HttpStatus.CONFLICT));
         Inmate inmate = new Inmate();
-        inmate.setName(myDto.getInmateName());
-        inmate.setPassword(passwordEncoder.encode(myDto.getInmatePassword()));
+        inmate.setName(inmateDto.getName());
+        inmate.setPassword(passwordEncoder.encode(inmateDto.getPassword()));
         inmate.setRoles(Collections.singletonList(roleRepo.findByName("USER").orElse(new Role("USER"))));
         house.addInmates(inmate);
         return new ResponseEntity<>(inmateRepo.save(inmate), HttpStatus.OK);
