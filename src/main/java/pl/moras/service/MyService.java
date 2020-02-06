@@ -2,10 +2,10 @@ package pl.moras.service;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.PropertyNotFoundException;
-import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.moras.models.*;
@@ -29,9 +29,7 @@ public class MyService implements IMyService {
     private RoleRepo roleRepo;
 
     @Override
-    public ResponseEntity<House> addHouse(HouseDto houseDto, InmateDto inmateDto) {
-        if (houseRepo.existsByName(houseDto.getName())||inmateRepo.existsByName(inmateDto.getName()))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    public House addHouse(HouseDto houseDto, InmateDto inmateDto) {
         House house = new House();
         Inmate inmate = new Inmate();
 
@@ -46,32 +44,25 @@ public class MyService implements IMyService {
         inmate.setRoles(Arrays.asList(userRole, managerRole));
         house.addInmates(inmate);
         inmateRepo.save(inmate);
-
-        return new ResponseEntity<>(house, HttpStatus.OK);
+        return house;
     }
 
     @Override
-    public ResponseEntity<Inmate> addInmate(HouseDto houseDto, InmateDto inmateDto) {
-        if (inmateRepo.existsByName(inmateDto.getName()))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    public Inmate addInmate(HouseDto houseDto, InmateDto inmateDto) {
         House house = houseRepo.findByName(houseDto.getName());
         if (!passwordEncoder.matches(houseDto.getPassword(), house.getPassword()))
-            return new ResponseEntity<>((HttpStatus.CONFLICT));
+            throw new UsernameNotFoundException("bad password");
         Inmate inmate = new Inmate();
         inmate.setName(inmateDto.getName());
         inmate.setPassword(passwordEncoder.encode(inmateDto.getPassword()));
         inmate.setRoles(Collections.singletonList(roleRepo.findByName("USER").orElse(new Role("USER"))));
         house.addInmates(inmate);
-        return new ResponseEntity<>(inmateRepo.save(inmate), HttpStatus.OK);
+        return inmateRepo.save(inmate);
     }
 
     @Override
-    public ResponseEntity<Inmate> getInmate(Principal principal) {
-        if (inmateRepo.findByName(principal.getName()).isPresent()){
-            Inmate inmate = inmateRepo.findByName(principal.getName()).get();
-            return new ResponseEntity<>(inmate, HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public Inmate getInmate(Principal principal) {
+        return inmateRepo.findByName(principal.getName()).orElseThrow(()-> new UsernameNotFoundException("Not found"));
     }
 
     @Override

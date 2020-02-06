@@ -10,13 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.moras.models.House;
-import pl.moras.models.Inmate;
-import pl.moras.models.MyDto;
+import pl.moras.models.*;
 import pl.moras.repos.HouseRepo;
 import pl.moras.repos.InmateRepo;
 import pl.moras.repos.PlanRepo;
+import pl.moras.repos.RoleRepo;
 import pl.moras.service.MyService;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,6 +36,9 @@ class InmateTests {
 	private InmateRepo inmateRepo;
 
 	@Mock
+	private RoleRepo roleRepo;
+
+	@Mock
 	private PasswordEncoder passwordEncoder;
 
 	@InjectMocks
@@ -48,30 +52,29 @@ class InmateTests {
 		when(houseRepo.findByName(getHouse().getName())).thenReturn(getHouse());
 		when(houseRepo.existsByName(getHouse().getName())).thenReturn(true);
 		when(houseRepo.save(any(House.class))).thenAnswer(answer->answer.getArgument(0));
+		when(roleRepo.findByName(anyString())).thenAnswer(answer-> {
+			Role role = new Role(answer.getArgument(0));
+			return Optional.of(role);
+		});
 		when(passwordEncoder.matches(anyString(), anyString())).thenAnswer(answer->answer.getArgument(0, String.class).equals(answer.getArgument(1, String.class)));
 		when(passwordEncoder.encode(anyString())).thenAnswer(answer->answer.getArgument(0));
 	}
 
 	@Test
 	void should_add_inmate(){
-		MyDto myDto = new MyDto();
-		myDto.setHouseName("house");
-		myDto.setHousePassword("password");
-		myDto.setInmateName("newInmate");
-		myDto.setInmatePassword("password");
-		ResponseEntity<Inmate> responseEntity = myService.addInmate(myDto);
-		assertTrue(responseEntity.getStatusCodeValue()==200);
+		InmateDto inmateDto = new InmateDto("newInmate", "password");
+		HouseDto houseDto = new HouseDto("house", "password");
+
+		Inmate inmate = myService.addInmate(houseDto, inmateDto);
+		assertEquals(inmateDto.getName(), inmate.getName());
 	}
 
 	@Test
 	void should_add_house(){
-		MyDto myDto = new MyDto();
-		myDto.setHouseName("newHouse");
-		myDto.setHousePassword("password");
-		myDto.setInmateName("newInmate");
-		myDto.setInmatePassword("password");
-		ResponseEntity<House> responseEntity = myService.addHouse(myDto);
-		assertEquals(true, responseEntity.getStatusCodeValue()==200);
+		HouseDto houseDto = new HouseDto("newHouse", "password");
+		InmateDto inmateDto = new InmateDto("newInmate", "password");
+		House house = myService.addHouse(houseDto, inmateDto);
+		assertEquals(houseDto.getName(), house.getName());
 	}
 
 

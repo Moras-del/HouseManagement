@@ -7,11 +7,11 @@ import java.security.Principal;
 
 public interface IMyService {
 
-    ResponseEntity<House> addHouse(HouseDto houseDto, InmateDto inmateDto);
+    House addHouse(HouseDto houseDto, InmateDto inmateDto);
 
-    ResponseEntity<Inmate> addInmate(HouseDto houseDto, InmateDto inmateDto);
+    Inmate addInmate(HouseDto houseDto, InmateDto inmateDto);
 
-    ResponseEntity<Inmate> getInmate(Principal principal);
+    Inmate getInmate(Principal principal);
 
     ResponseEntity<House> setBudget(Principal principal, int budget);
 
