@@ -11,7 +11,7 @@ import pl.moras.service.IMyService;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class HouseController {
+public class MainController {
 
     private IMyService myService;
 
@@ -51,10 +51,6 @@ public class HouseController {
 //        return myService.contribPlan(principal, money, planName);
 //    }
 
-    @RequestMapping(value = "/siema", method = RequestMethod.GET)
-    public String main(){
-        return "main";
-    }
 
 
 }

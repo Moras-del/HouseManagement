@@ -30,32 +30,24 @@ import pl.moras.security.MyUserDetailsService;
 public class Config extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     @Autowired
-    private MyBasicEntryPoint myBasicEntryPoint;
-
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+        auth.inMemoryAuthentication().withUser("moras").password(getPasswordEncoder().encode("haslo")).roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().headers().frameOptions().disable();
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/house", "/api/inmate").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
-        http.authorizeRequests().anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .authenticationEntryPoint(myBasicEntryPoint);
+        http.authorizeRequests().antMatchers("/").permitAll()
+                .anyRequest().authenticated();
+        http.formLogin().permitAll();
+
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
 
     @Bean
     PasswordEncoder getPasswordEncoder(){

@@ -4,8 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<form action="#" th:action="@{/register}" th:object="${house}" method="post">
-    <p>text area </p>
+<form action="#" th:action="@{/house/register}" th:object="${house}" method="post">
+    <label>
+        <p/>Nazwa domu
+    </label>
     <button type="submit">submit</button>
 </form>
 </body>
