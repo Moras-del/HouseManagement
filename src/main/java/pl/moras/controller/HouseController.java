@@ -13,7 +13,7 @@ public class HouseController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String houseregister(Model model){
-        model.addAttribute("house", new HouseDto());
+        model.addAttribute("hous", new HouseDto());
         return "houseregister";
     }
 }
