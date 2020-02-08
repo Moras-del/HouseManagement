@@ -7,9 +7,9 @@ import java.security.Principal;
 
 public interface IMyService {
 
-    House addHouse(HouseDto houseDto, InmateDto inmateDto);
+    House addHouse(HouseInmateDto houseInmateDto);
 
-    Inmate addInmate(HouseDto houseDto, InmateDto inmateDto);
+    Inmate addInmate(HouseInmateDto houseInmateDto);
 
     Inmate getInmate(Principal principal);
 

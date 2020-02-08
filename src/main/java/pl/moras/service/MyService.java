@@ -29,16 +29,16 @@ public class MyService implements IMyService {
     private RoleRepo roleRepo;
 
     @Override
-    public House addHouse(HouseDto houseDto, InmateDto inmateDto) {
+    public House addHouse(HouseInmateDto houseInmateDto) {
         House house = new House();
         Inmate inmate = new Inmate();
 
-        house.setName(houseDto.getName());
-        house.setPassword(passwordEncoder.encode(houseDto.getPassword()));
+        house.setName(houseInmateDto.getHouseName());
+        house.setPassword(passwordEncoder.encode(houseInmateDto.getHousePassword()));
         house = houseRepo.save(house);
 
-        inmate.setName(inmateDto.getName());
-        inmate.setPassword(passwordEncoder.encode(inmateDto.getPassword()));
+        inmate.setName(houseInmateDto.getInmateName());
+        inmate.setPassword(passwordEncoder.encode(houseInmateDto.getInmatePassword()));
         Role userRole = roleRepo.findByName("USER").orElse(new Role("USER"));
         Role managerRole = roleRepo.findByName("HOUSEMANAGER").orElse(new Role("HOUSEMANAGER"));
         inmate.setRoles(Arrays.asList(userRole, managerRole));
@@ -48,13 +48,13 @@ public class MyService implements IMyService {
     }
 
     @Override
-    public Inmate addInmate(HouseDto houseDto, InmateDto inmateDto) {
-        House house = houseRepo.findByName(houseDto.getName());
-        if (!passwordEncoder.matches(houseDto.getPassword(), house.getPassword()))
+    public Inmate addInmate(HouseInmateDto houseInmateDto) {
+        House house = houseRepo.findByName(houseInmateDto.getHouseName());
+        if (!passwordEncoder.matches(houseInmateDto.getHousePassword(), house.getPassword()))
             throw new UsernameNotFoundException("bad password");
         Inmate inmate = new Inmate();
-        inmate.setName(inmateDto.getName());
-        inmate.setPassword(passwordEncoder.encode(inmateDto.getPassword()));
+        inmate.setName(houseInmateDto.getInmateName());
+        inmate.setPassword(passwordEncoder.encode(houseInmateDto.getInmatePassword()));
         inmate.setRoles(Collections.singletonList(roleRepo.findByName("USER").orElse(new Role("USER"))));
         house.addInmates(inmate);
         return inmateRepo.save(inmate);

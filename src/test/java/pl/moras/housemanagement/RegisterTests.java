@@ -9,6 +9,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.moras.models.*;
 import pl.moras.repos.HouseRepo;
@@ -21,13 +22,14 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(MockitoJUnitRunner.class)
-class InmateTests {
+class RegisterTests {
 
 	@Mock
 	private HouseRepo houseRepo;
@@ -67,6 +69,13 @@ class InmateTests {
 
 		Inmate inmate = myService.addInmate(houseDto, inmateDto);
 		assertEquals(inmateDto.getName(), inmate.getName());
+	}
+
+	@Test
+	void should_add_inmate_fail(){
+		InmateDto inmateDto = new InmateDto("newInmate", "password");
+		HouseDto houseDto = new HouseDto("house", "badPassword");
+		assertThrows(UsernameNotFoundException.class, ()-> myService.addInmate(houseDto, inmateDto));
 	}
 
 	@Test

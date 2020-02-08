@@ -6,7 +6,7 @@
 <body>
 <form action="#" th:action="@{/house/register}" th:object="${house}" method="post">
     <label>
-        <p/>Nazwa domu
+        <p>Nazwa domu <input type="text" th:field="*{name}"/></p>
     </label>
     <button type="submit">submit</button>
 </form>
