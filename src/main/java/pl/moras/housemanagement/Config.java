@@ -42,7 +42,7 @@ public class Config extends WebSecurityConfigurerAdapter implements WebMvcConfig
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().headers().frameOptions().disable();
 
-        http.authorizeRequests().antMatchers("/").permitAll()
+        http.authorizeRequests().antMatchers("/", "/house/register", "inmate/register").permitAll()
                 .anyRequest().authenticated();
         http.formLogin().permitAll();
 
