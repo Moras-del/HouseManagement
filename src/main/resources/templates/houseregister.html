@@ -4,10 +4,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<form action="#" th:action="@{/house/register}" th:object="${house}" method="post">
+<form action="#" th:action="@{/house/register}" th:object="${houseInmateDto}" method="post">
     <label>
-        <p>Nazwa domu <input type="text" th:field="*{name}"/></p>
+        <p>Nazwa domu <input type="text" th:field="*{houseName}"/></p>
     </label>
+    <label>
+        <p>Hasło domu <input type="text" th:field="*{houseName}"/></p>
+    </label>
+    <label>
+        <p>Nazwa domu <input type="text" th:field="*{houseName}"/></p>
+    </label>
+    <label>
+        <p>Nazwa domu <input type="text" th:field="*{houseName}"/></p>
+    </label>
+
     <button type="submit">submit</button>
 </form>
 </body>

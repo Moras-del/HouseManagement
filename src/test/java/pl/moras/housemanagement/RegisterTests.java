@@ -64,26 +64,37 @@ class RegisterTests {
 
 	@Test
 	void should_add_inmate(){
-		InmateDto inmateDto = new InmateDto("newInmate", "password");
-		HouseDto houseDto = new HouseDto("house", "password");
+		HouseInmateDto houseInmateDto = new HouseInmateDto();
+		houseInmateDto.setHouseName("house");
+		houseInmateDto.setHousePassword("password");
+		houseInmateDto.setInmateName("newInmate");
+		houseInmateDto.setInmatePassword("password");
 
-		Inmate inmate = myService.addInmate(houseDto, inmateDto);
-		assertEquals(inmateDto.getName(), inmate.getName());
+		Inmate inmate = myService.addInmate(houseInmateDto);
+		assertEquals(houseInmateDto.getInmateName(), inmate.getName());
 	}
 
 	@Test
 	void should_add_inmate_fail(){
-		InmateDto inmateDto = new InmateDto("newInmate", "password");
-		HouseDto houseDto = new HouseDto("house", "badPassword");
-		assertThrows(UsernameNotFoundException.class, ()-> myService.addInmate(houseDto, inmateDto));
+		HouseInmateDto houseInmateDto = new HouseInmateDto();
+		houseInmateDto.setHouseName("house");
+		houseInmateDto.setHousePassword("badPassword");
+		houseInmateDto.setInmateName("newInmate");
+		houseInmateDto.setInmatePassword("password");
+
+		assertThrows(UsernameNotFoundException.class, ()-> myService.addInmate(houseInmateDto));
 	}
 
 	@Test
 	void should_add_house(){
-		HouseDto houseDto = new HouseDto("newHouse", "password");
-		InmateDto inmateDto = new InmateDto("newInmate", "password");
-		House house = myService.addHouse(houseDto, inmateDto);
-		assertEquals(houseDto.getName(), house.getName());
+		HouseInmateDto houseInmateDto = new HouseInmateDto();
+		houseInmateDto.setHouseName("newHouse");
+		houseInmateDto.setHousePassword("password");
+		houseInmateDto.setInmateName("newInmate");
+		houseInmateDto.setInmatePassword("password");
+
+		House house = myService.addHouse(houseInmateDto);
+		assertEquals(houseInmateDto.getHouseName(), house.getName());
 	}
 
 
