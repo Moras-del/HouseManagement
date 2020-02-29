@@ -37,7 +37,8 @@ public class AuthService implements IAuthService {
             throw new HouseAlreadyExists();
 
         Inmate inmate = createInmate(inmateName, inmatePassword, InmateType.HOUSE_ADMIN);
-        return createHouse(houseName, housePassword, inmate);
+        House house = createHouse(houseName, housePassword, inmate);
+        return houseRepo.save(house);
     }
 
 
@@ -84,7 +85,7 @@ public class AuthService implements IAuthService {
         house.setName(name);
         house.setPassword(passwordEncoder.encode(password));
         house.addInmate(inmate);
-        return houseRepo.save(house);
+        return house;
     }
 
     private Inmate createInmate(String name, String password, InmateType inmateType){
