@@ -18,19 +18,20 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
+@RequestMapping("/main")
 public class MainController {
 
     private IMainService mainService;
 
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    @GetMapping
     public String showMainPage(Model model, Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);
         model.addAttribute("house", inmate.getHouse());
         return "mainpage";
     }
 
-    @RequestMapping(value = "/main", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<Map> takeFromBudget(@RequestParam int expenses, Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);
         House house = mainService.takeFromBudget(inmate, expenses);
@@ -42,7 +43,7 @@ public class MainController {
     }
 
     @RolesAllowed("HOUSE_ADMIN")
-    @RequestMapping(value = "/main/budget", method = RequestMethod.PUT)
+    @PutMapping(value = "/budget")
     public ResponseEntity setBudget(@RequestParam int budget, Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);
         mainService.setBudget(inmate.getHouse(), budget);
@@ -50,35 +51,14 @@ public class MainController {
     }
 
     @RolesAllowed("HOUSE_ADMIN")
-    @RequestMapping(value = "/main/reset", method = RequestMethod.POST)
+    @PostMapping(value = "/reset")
     public String resetExpenses(Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);
         mainService.resetExpenses(inmate.getHouse());
         return "redirect:/main";
     }
 
-    @RequestMapping(value = "/plans", method = RequestMethod.GET)
-    public String showPlansPage(Model model, Principal principal){
-        Inmate inmate = mainService.getInmateFromPrincipal(principal);
-        List<Plan> plans = inmate.getHouse().getPlans();
-        model.addAttribute("plans", plans);
-        model.addAttribute("planDto", new PlanDto());
-        return "planspage";
-    }
 
-    @RequestMapping(value = "/plans", method = RequestMethod.PUT)
-    public ResponseEntity contribPlan(@RequestBody PlanDto planDto, Principal principal){
-        Inmate inmate = mainService.getInmateFromPrincipal(principal);
-        int costLeft = mainService.contribPlan(inmate, planDto);
-        return ResponseEntity.ok(costLeft);
-    }
-
-    @RequestMapping(value = "/plans", method = RequestMethod.POST)
-    public String newPlan(@Valid @ModelAttribute PlanDto planDto, Principal principal){
-        Inmate inmate = mainService.getInmateFromPrincipal(principal);
-        mainService.addPlan(inmate, planDto);
-        return "redirect:/plans";
-    }
 
 
 }

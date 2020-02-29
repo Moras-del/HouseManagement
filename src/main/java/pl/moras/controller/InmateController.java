@@ -16,7 +16,7 @@ import pl.moras.service.MainService;
 import javax.validation.Valid;
 
 @Controller
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
 @RequestMapping("/inmate")
 public class InmateController {
 
