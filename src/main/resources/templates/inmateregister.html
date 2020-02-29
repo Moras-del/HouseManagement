@@ -1,8 +1,8 @@
-<!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Zarejestruj dom</title>
+    <meta charset="UTF-8">
+    <title>Zarejestruj się</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
     <link href="/css/main.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -10,13 +10,10 @@
     <script src="/scripts/validation.js"></script>
 </head>
 <body>
-<div class="ui middle aligned center aligned grid">
-    <h1 class="ui header">
-        Załóż konto dla swojego domu
-    </h1>
-    <form action="#" th:action="@{/house/register}" th:object="${houseInmateDto}" method="post" class="ui form">
+<div class="content">
+    <form action="#" th:action="@{/inmate/register}" th:object="${houseInmateDto}" method="post" class="ui form">
         <label>
-            <div class="ui corner labeled input" data-tooltip="Podaj nazwę domu (do niego będą się łączyć inni domownicy)">
+            <div class="ui corner labeled input" data-tooltip="Podaj nazwę domu do którego się rejestrujesz">
                 <div class="field">
                     <input name="houseName" type="text" placeholder="Nazwa domu" th:field="*{houseName}">
                 </div>
@@ -24,17 +21,9 @@
         </label>
         <div class="ui hidden divider"/>
         <label>
-            <div class="ui corner labeled input" data-tooltip="Podaj hasło domu (do niego będą się łączyć inni domownicy)">
+            <div class="ui corner labeled input" data-tooltip="Podaj hasło domu">
                 <div class="field">
                     <input name="housePassword" type="password" placeholder="Hasło domu" th:field="*{housePassword}">
-                </div>
-            </div>
-        </label>
-        <div class="ui hidden divider"/>
-        <label>
-            <div class="ui corner labeled input">
-                <div class="field">
-                    <input name="confirmHousePassword" type="password" placeholder="Potwierdź hasło" th:field="*{confirmHousePassword}">
                 </div>
             </div>
         </label>
@@ -48,9 +37,10 @@
         </label>
         <div class="ui hidden divider"/>
         <label>
-            <div class="ui corner labeled input" data-tooltip="Podaj swoje prywatne hasło">
+            <div class="ui corner labeled input" data-tooltip="Podaj swoje hasło">
                 <div class="field">
-                    <input  name="inmatePassword" type="password" placeholder="Hasło domownika" th:field="*{inmatePassword}">
+                    <input name="inmatePassword" type="password" placeholder="Hasło domownika"
+                           th:field="*{inmatePassword}">
                 </div>
             </div>
         </label>
@@ -58,8 +48,9 @@
         <label>
             <div class="ui corner labeled input">
                 <div class="field">
-                    <input name="confirmInmatePassword" type="password" placeholder="Potwierdź hasło" th:field="*{confirmInmatePassword}">
-                </div>    
+                    <input name="confirmInmatePassword" type="password" placeholder="Potwierdź hasło"
+                           th:field="*{confirmInmatePassword}">
+                </div>
             </div>
         </label>
         <div class="ui hidden divider"/>

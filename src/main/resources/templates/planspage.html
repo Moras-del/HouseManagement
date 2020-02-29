@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zarządzanie planami</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link href="/css/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://semantic-ui.com/dist/components/dimmer.js"></script>
+    <script src="https://semantic-ui.com/dist/components/transition.js"></script>
+    <script src="https://semantic-ui.com/dist/components/modal.js"></script>
+    <script src="https://semantic-ui.com/dist/components/form.js"></script>
+    <script src="/scripts/plans.js"></script>
+</head>
+<body>
+<table class="ui selectable celled table">
+    <thead>
+        <tr>
+            <th>Twórca</th>
+            <th>Nazwa</th>
+            <th>Zostało do zebrania</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="plan : ${plans}">
+            <td th:text="${plan.owner.name}"/>
+            <td th:text="${plan.name}"/>
+            <td th:text="${plan.cost}+'zł'"/>
+        </tr>
+    </tbody>
+</table>
+
+<button id="addplan_button" class="ui button">Dodaj nowy plan</button>
+<div class="ui hidden divider"></div>
+<button id="return" class="ui button">Powrót</button>
+
+<div class="ui mini modal addplan">
+    <form id="addplan_form" action="#" th:action="@{/plans}" method="post" class="ui form" th:object="${planDto}">
+        <input name="name" type="text" placeholder="Nazwa planu" th:field="*{name}">
+        <div class="ui hidden divider"/>
+        <input name="cost" type="text" placeholder="Koszt" th:field="*{cost}" class="numericinput">
+        <p th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"/>
+        <div class="actions">
+            <div class="ui positive right labeled icon button">
+                Dodaj plan
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+        <div class="ui error message"></div>
+    </form>
+</div>
+
+<div class="ui mini modal updateplan">
+    <p id="plan-name"/>
+    <p>Koszt planu: <span id="plan-cost"/></p>
+    <input type="text" class="numericinput" placeholder="Kwota, którą chcesz wspomóc plan">
+    <div class="actions">
+        <div class="ui positive right labeled icon button">
+            Wesprzyj plan
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

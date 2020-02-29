@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Twój dom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link href="/css/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://semantic-ui.com/dist/components/dimmer.js"></script>
+    <script src="https://semantic-ui.com/dist/components/transition.js"></script>
+    <script src="https://semantic-ui.com/dist/components/modal.js"></script>
+    <script src="/scripts/main.js"></script>
+</head>
+<body>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th>Budżet domu: <span id="budget-value" th:text="${house.budget}"/></th>
+    </tr>
+    </thead>
+    <thead>
+    <tr>
+        <th>Użytkownik</th>
+        <th>Plany</th>
+        <th>Wydatki</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="inmate : ${house.inmates}">
+        <td th:text="${inmate.name}"/>
+        <td>
+            <div th:each="plan: ${inmate.plans}" class="plan">
+                <span th:text="${plan.name}+', do zebrania '+${plan.cost}+'zł '"/>
+            </div>
+        </td>
+        <td th:id="${inmate.name}+'_expenses'" th:text="${inmate.expenses}"/>
+    </tr>
+    </tbody>
+</table>
+<button id="contrib-plan" class="ui button">Zarządzanie planami</button>
+<div class="ui hidden divider"></div>
+<button id="add-expenses" class="ui button">Pobierz pieniądze z budżetu</button>
+<div class="ui hidden divider"></div>
+<div sec:authorize="hasRole('ROLE_HOUSE_ADMIN')">
+    <button id="set-budget" class="ui button">Zmień budżet</button>
+    <div class="ui hidden divider"></div>
+    <form action="#" th:action="@{/main/reset}" method="post" class="ui form">
+        <button id="reset-expenses" class="ui button">Zresetuj wydatki</button>
+    </form>
+</div>
+<div class="ui hidden divider"></div>
+<form class="ui form" method="post" action="#" th:action="@{/logout}">
+    <button class="ui button">Wyloguj się</button>
+</form>
+<div class="ui mini modal reducebudget">
+    <p>Budżet: <span id="modal-budget"/></p>
+    <input id="reduce-budget-input" type="text" placeholder="Wartość, jaką chcesz pobrać" class="numericinput">
+    <div class="actions">
+        <div class="ui positive icon button">
+            Pobierz
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal setbudget">
+    <div class="ui hidden divider"></div>
+    <input id="set-budget-input" type="text" placeholder="Podaj nowy stan budżetu" class="numericinput">
+    <div class="ui hidden divider"></div>
+    <div class="actions">
+        <div class="ui positive middle labeled icon button">
+            Ustaw
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

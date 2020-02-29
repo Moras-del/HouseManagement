@@ -8,19 +8,22 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "inmate")
-public class Inmate {
+public class Inmate{
 
 
     @Id
@@ -31,6 +34,7 @@ public class Inmate {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private int expenses;
 
     @OneToMany(mappedBy = "owner",
@@ -61,7 +65,7 @@ public class Inmate {
         this.roles = inmate.getRoles();
     }
 
-    public void addPlans(Plan plan){
+    public void addPlan(Plan plan){
         if (plans == null){
             plans = new ArrayList<>();
         }
@@ -69,4 +73,7 @@ public class Inmate {
         plan.setOwner(this);
     }
 
+    public void addExpenses(int expenses){
+        this.expenses+=expenses;
+    }
 }

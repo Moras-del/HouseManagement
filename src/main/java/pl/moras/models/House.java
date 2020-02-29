@@ -31,8 +31,8 @@ public class House {
 
     private int budget;
 
-    @OneToMany(mappedBy = "house"
-                ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house",
+            cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
     @JsonManagedReference
     private List<Inmate> inmates;
@@ -43,7 +43,7 @@ public class House {
     @JsonManagedReference
     private List<Plan> plans;
 
-    public void addInmates(Inmate inmate){
+    public void addInmate(Inmate inmate){
         if(inmates==null){
             inmates = new ArrayList<>();
         }
@@ -51,11 +51,16 @@ public class House {
         inmate.setHouse(this);
     }
 
-    public void addPlans(Plan plan){
-        if (plans == null){
+    public void addPlan(Plan plan){
+        if(plans==null){
             plans = new ArrayList<>();
         }
         plans.add(plan);
         plan.setHouse(this);
+    }
+
+
+    public void cutBudget(int expenses){
+        budget -= expenses;
     }
 }

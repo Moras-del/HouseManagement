@@ -1,6 +1,7 @@
 package pl.moras.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,4 +33,8 @@ public class Plan {
     @JsonBackReference
     private House house;
 
+    public int cutCost(int contribution){
+        cost -= contribution;
+        return cost;
+    }
 }

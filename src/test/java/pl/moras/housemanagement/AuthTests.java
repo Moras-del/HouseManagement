@@ -6,18 +6,18 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.moras.exceptions.WrongHousePasswordException;
 import pl.moras.models.*;
 import pl.moras.repos.HouseRepo;
 import pl.moras.repos.InmateRepo;
-import pl.moras.repos.PlanRepo;
 import pl.moras.repos.RoleRepo;
-import pl.moras.service.MyService;
+import pl.moras.service.AuthService;
+import pl.moras.service.InmateType;
+import pl.moras.service.MainService;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -28,8 +28,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-class RegisterTests {
+class AuthTests {
 
 	@Mock
 	private HouseRepo houseRepo;
@@ -43,23 +42,21 @@ class RegisterTests {
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
-	@InjectMocks
-	private MyService myService;
+	private AuthService authService;
 
 	@BeforeEach
-	private void setup(){
+	void setup(){
 		initMocks(this);
-		when(inmateRepo.existsByName(getInmate().getName())).thenReturn(true);
+		when(inmateRepo.existsByNameAndHouse(getInmate().getName(), getHouse())).thenReturn(true);
 		when(inmateRepo.save(any(Inmate.class))).thenAnswer(answer->answer.getArgument(0));
-		when(houseRepo.findByName(getHouse().getName())).thenReturn(getHouse());
+		when(houseRepo.findByName(getHouse().getName())).thenReturn(Optional.of(getHouse()));
 		when(houseRepo.existsByName(getHouse().getName())).thenReturn(true);
 		when(houseRepo.save(any(House.class))).thenAnswer(answer->answer.getArgument(0));
-		when(roleRepo.findByName(anyString())).thenAnswer(answer-> {
-			Role role = new Role(answer.getArgument(0));
-			return Optional.of(role);
-		});
+		when(roleRepo.findByName(anyString())).thenAnswer(answer-> new Role(answer.getArgument(0)));
+		when(roleRepo.findAll()).thenAnswer(answer-> Collections.singletonList(new Role("HOUSE_ADMIN")));
 		when(passwordEncoder.matches(anyString(), anyString())).thenAnswer(answer->answer.getArgument(0, String.class).equals(answer.getArgument(1, String.class)));
 		when(passwordEncoder.encode(anyString())).thenAnswer(answer->answer.getArgument(0));
+		authService = new AuthService(passwordEncoder, houseRepo, inmateRepo, roleRepo);
 	}
 
 	@Test
@@ -70,7 +67,7 @@ class RegisterTests {
 		houseInmateDto.setInmateName("newInmate");
 		houseInmateDto.setInmatePassword("password");
 
-		Inmate inmate = myService.addInmate(houseInmateDto);
+		Inmate inmate = authService.addInmate(houseInmateDto);
 		assertEquals(houseInmateDto.getInmateName(), inmate.getName());
 	}
 
@@ -82,7 +79,7 @@ class RegisterTests {
 		houseInmateDto.setInmateName("newInmate");
 		houseInmateDto.setInmatePassword("password");
 
-		assertThrows(UsernameNotFoundException.class, ()-> myService.addInmate(houseInmateDto));
+		assertThrows(WrongHousePasswordException.class, ()-> authService.addInmate(houseInmateDto));
 	}
 
 	@Test
@@ -93,7 +90,7 @@ class RegisterTests {
 		houseInmateDto.setInmateName("newInmate");
 		houseInmateDto.setInmatePassword("password");
 
-		House house = myService.addHouse(houseInmateDto);
+		House house = authService.addHouse(houseInmateDto);
 		assertEquals(houseInmateDto.getHouseName(), house.getName());
 	}
 
