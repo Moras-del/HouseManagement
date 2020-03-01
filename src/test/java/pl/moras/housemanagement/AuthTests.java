@@ -1,5 +1,6 @@
 package pl.moras.housemanagement;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +46,7 @@ class AuthTests {
 	private AuthService authService;
 
 	@BeforeEach
-	void setup(){
+	public void setup(){
 		initMocks(this);
 		when(inmateRepo.existsByNameAndHouse(getInmate().getName(), getHouse())).thenReturn(true);
 		when(inmateRepo.save(any(Inmate.class))).thenAnswer(answer->answer.getArgument(0));
