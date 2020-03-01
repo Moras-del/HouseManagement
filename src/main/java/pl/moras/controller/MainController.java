@@ -42,7 +42,6 @@ public class MainController {
         return ResponseEntity.ok(response);
     }
 
-    @RolesAllowed("HOUSE_ADMIN")
     @PutMapping(value = "/budget")
     public ResponseEntity setBudget(@RequestParam int budget, Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);
@@ -50,7 +49,6 @@ public class MainController {
         return ResponseEntity.ok().build();
     }
 
-    @RolesAllowed("HOUSE_ADMIN")
     @PostMapping(value = "/reset")
     public String resetExpenses(Principal principal){
         Inmate inmate = mainService.getInmateFromPrincipal(principal);

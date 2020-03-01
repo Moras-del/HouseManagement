@@ -62,6 +62,7 @@ public class Config extends WebSecurityConfigurerAdapter {
                     .antMatchers("/**/*.css", "/**/*.js").permitAll()
                     .antMatchers("/house/register", "/inmate/register", "/inmate/login").anonymous()
                     .antMatchers("/", "h2-console").permitAll()
+                    .antMatchers("/main/*").hasRole("HOUSE_ADMIN")
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling().accessDeniedPage("/");

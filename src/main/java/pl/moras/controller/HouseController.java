@@ -29,8 +29,8 @@ public class HouseController {
     }
 
     @PostMapping
-    public String houseRegister(@Valid @ModelAttribute HouseInmateDto houseInmateDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+    public String houseRegister(@Valid @ModelAttribute HouseInmateDto houseInmateDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "houseregister";
         }
         authService.addHouse(houseInmateDto);
