@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import javax.validation.constraints.Min;
 public class PlanDto {
     private String name;
 
-    @Min(value = 1, message = "Koszt musi być wyższy od 0")
+    @Positive(message = "Koszt musi być wyższy od 0")
     private int cost;
     private int contribution;
 }
