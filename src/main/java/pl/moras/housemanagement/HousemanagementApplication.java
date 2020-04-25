@@ -5,9 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import pl.moras.models.Inmate;
-import pl.moras.models.Role;
-import pl.moras.repos.RoleRepo;
+import pl.moras.housemanagement.models.Role;
+import pl.moras.housemanagement.repos.RoleRepo;
 
 @SpringBootApplication
 public class HousemanagementApplication {
@@ -20,8 +19,8 @@ public class HousemanagementApplication {
 	public CommandLineRunner commandLineRunner(ApplicationContext applicationContext){
 		RoleRepo roleRepo = applicationContext.getBean(RoleRepo.class);
 		return args->{
-			roleRepo.save(new Role("USER"));
-			roleRepo.save(new Role("HOUSE_ADMIN"));
+			roleRepo.save(Role.of("USER"));
+			roleRepo.save(Role.of("HOUSE_ADMIN"));
 		};
 
 	}
