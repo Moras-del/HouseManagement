@@ -3,6 +3,22 @@
     align-content: space-between;
 }
 
+.main-options-container{
+    width: 100%;
+    text-align: center;
+}
+
+.main-options{
+    padding: 10% 0;
+}
+
+.content-wrapper{
+    width: 100%;
+    text-align: center;
+}
+.content{
+    padding: 10% 0;
+}
 
 .plan{
     display: inline-block;

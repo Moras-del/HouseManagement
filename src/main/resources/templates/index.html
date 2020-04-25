@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>zarządzanie domem</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
     <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-<p>ZARZĄDZANIE DOMEM</p>
-<br>
-<div class="anon" sec:authorize="isAnonymous()">
-    <a href="/house/register">Zarejestruj dom</a>
-    <br>
-    <a href="/inmate/register">Dołącz do istniejącego domu</a>
-    <br>
-    <a href="/inmate/login">Zaloguj się</a>
-</div>
-<div sec:authorize="isAuthenticated()">
-    <a href="/main">Przejdź do panelu zarządzania domem</a>
+<div class="content-wrapper">
+    <div class="content">
+        <p>ZARZĄDZANIE DOMEM</p>
+        <div sec:authorize="isAnonymous()">
+            <a href="/house/register">Zarejestruj dom</a>
+            <br>
+            <a href="/inmate/register">Dołącz do istniejącego domu</a>
+            <br>
+            <a href="/inmate/login">Zaloguj się</a>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <a href="/main">Przejdź do panelu zarządzania domem</a>
+        </div>
+        <br>
+        <p>Aplikacja do zarządzania wydatkami domowymi.</p>
+        <p>Każdy użytkownik zapisuje ile pobrał z budżetu domowego. Może również dodać plany, na przykład zbiórka na
+            rower.</p>
+        <p>Administrator domu może resetować wydatki oraz zmieniać budżet</p>
+    </div>
 </div>
 </body>
 </html>

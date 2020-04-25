@@ -7,46 +7,50 @@
     <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-<div class="ui middle aligned center aligned grid">
-    <h1 class="ui header">
-        Zaloguj się
-    </h1>
-    <form action="#" th:action="@{/inmate/login}" th:object="${houseInmateDto}" method="post" class="ui form">
-        <label>
-            <div class="ui corner labeled input">
-                <div class="field">
-                    <input name="houseName" type="text" placeholder="Nazwa domu" th:field="*{houseName}">
+<div class="content-wrapper">
+    <div class="content">
+        <h1 class="ui header">
+            Zaloguj się
+        </h1>
+        <form action="#" th:action="@{/inmate/login}" th:object="${houseInmateDto}" method="post" class="ui form">
+            <label>
+                <div class="ui corner labeled input">
+                    <div class="field">
+                        <input name="houseName" type="text" placeholder="Nazwa domu" th:field="*{houseName}">
+                    </div>
                 </div>
-            </div>
-        </label>
-        <div class="ui hidden divider"/>
-        <label>
-            <div class="ui corner labeled input">
-                <div class="field">
-                    <input name="housePassword" type="password" placeholder="Hasło domu" th:field="*{housePassword}">
+            </label>
+            <div class="ui hidden divider"/>
+            <label>
+                <div class="ui corner labeled input">
+                    <div class="field">
+                        <input name="housePassword" type="password" placeholder="Hasło domu"
+                               th:field="*{housePassword}">
+                    </div>
                 </div>
-            </div>
-        </label>
-        <div class="ui hidden divider"/>
-        <label>
-            <div class="ui corner labeled input">
-                <div class="field">
-                    <input name="inmateName" type="text" placeholder="Nazwa domownika" th:field="*{inmateName}">
+            </label>
+            <div class="ui hidden divider"/>
+            <label>
+                <div class="ui corner labeled input">
+                    <div class="field">
+                        <input name="inmateName" type="text" placeholder="Nazwa domownika" th:field="*{inmateName}">
+                    </div>
                 </div>
-            </div>
-        </label>
-        <div class="ui hidden divider"/>
-        <label>
-            <div class="ui corner labeled input">
-                <div class="field">
-                    <input  name="inmatePassword" type="password" placeholder="Hasło domownika" th:field="*{inmatePassword}">
+            </label>
+            <div class="ui hidden divider"/>
+            <label>
+                <div class="ui corner labeled input">
+                    <div class="field">
+                        <input name="inmatePassword" type="password" placeholder="Hasło domownika"
+                               th:field="*{inmatePassword}">
+                    </div>
                 </div>
-            </div>
-        </label>
-        <div class="ui hidden divider"/>
-        <button class="ui inverted blue button" type="submit">submit</button>
-        <div class="ui error message"></div>
-    </form>
+            </label>
+            <div class="ui hidden divider"/>
+            <button class="ui inverted blue button" type="submit">submit</button>
+            <div class="ui error message"></div>
+        </form>
+    </div>
 </div>
 </body>
 </html>
