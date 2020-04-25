@@ -1,23 +1,17 @@
 package pl.moras.housemanagement;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.moras.exceptions.WrongHousePasswordException;
-import pl.moras.models.*;
-import pl.moras.repos.HouseRepo;
-import pl.moras.repos.InmateRepo;
-import pl.moras.repos.RoleRepo;
-import pl.moras.service.AuthService;
-import pl.moras.service.InmateType;
-import pl.moras.service.MainService;
+import pl.moras.housemanagement.exceptions.WrongHousePasswordException;
+import pl.moras.housemanagement.models.*;
+import pl.moras.housemanagement.repos.HouseRepo;
+import pl.moras.housemanagement.repos.InmateRepo;
+import pl.moras.housemanagement.repos.RoleRepo;
+import pl.moras.housemanagement.service.AuthService;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -53,8 +47,8 @@ class AuthTests {
 		when(houseRepo.findByName(getHouse().getName())).thenReturn(Optional.of(getHouse()));
 		when(houseRepo.existsByName(getHouse().getName())).thenReturn(true);
 		when(houseRepo.save(any(House.class))).thenAnswer(answer->answer.getArgument(0));
-		when(roleRepo.findByName(anyString())).thenAnswer(answer-> new Role(answer.getArgument(0)));
-		when(roleRepo.findAll()).thenAnswer(answer-> Collections.singletonList(new Role("HOUSE_ADMIN")));
+		when(roleRepo.findByName(anyString())).thenAnswer(answer-> Role.of(answer.getArgument(0)));
+		when(roleRepo.findAll()).thenAnswer(answer-> Collections.singletonList(Role.of("HOUSE_ADMIN")));
 		when(passwordEncoder.matches(anyString(), anyString())).thenAnswer(answer->answer.getArgument(0, String.class).equals(answer.getArgument(1, String.class)));
 		when(passwordEncoder.encode(anyString())).thenAnswer(answer->answer.getArgument(0));
 		authService = new AuthService(passwordEncoder, houseRepo, inmateRepo, roleRepo);

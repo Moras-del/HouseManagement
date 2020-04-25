@@ -1,23 +1,16 @@
 package pl.moras.housemanagement;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.moras.models.House;
-import pl.moras.models.Inmate;
-import pl.moras.models.Plan;
-import pl.moras.models.PlanDto;
-import pl.moras.repos.HouseRepo;
-import pl.moras.repos.InmateRepo;
-import pl.moras.repos.PlanRepo;
-import pl.moras.repos.RoleRepo;
-import pl.moras.service.IMainService;
-import pl.moras.service.MainService;
+import pl.moras.housemanagement.models.House;
+import pl.moras.housemanagement.models.Inmate;
+import pl.moras.housemanagement.repos.HouseRepo;
+import pl.moras.housemanagement.repos.InmateRepo;
+import pl.moras.housemanagement.repos.PlanRepo;
+import pl.moras.housemanagement.service.IMainService;
+import pl.moras.housemanagement.service.MainService;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -44,8 +37,6 @@ public class MainTests {
     void setup(){
         initMocks(this);
         when(houseRepo.save(any(House.class))).thenReturn(new House());
-        when(planRepo.save(any(Plan.class))).thenReturn(new Plan());
-        when(planRepo.getPlan(anyInt(), anyString())).thenReturn(Optional.of(getPlan()));
         when(inmateRepo.findByName("inmate")).thenReturn(Optional.of(getInmate()));
         mainService = new MainService(houseRepo, inmateRepo, planRepo);
     }
@@ -58,38 +49,12 @@ public class MainTests {
     }
 
     @Test
-    void should_add_plan(){
-        PlanDto planDto = new PlanDto();
-        planDto.setName("name");
-        planDto.setCost(1000);
-        Inmate inmate = getInmate();
-        House house = getHouse();
-
-        house.addInmate(inmate);
-        mainService.addPlan(inmate, planDto);
-        assertFalse(inmate.getPlans().isEmpty());
-        assertFalse(house.getPlans().isEmpty());
-    }
-
-    @Test
     void should_take_money_from_budget(){
         House house = getHouse();
         Inmate inmate = getInmate();
         house.addInmate(inmate);
         House resultHouse = mainService.takeFromBudget(inmate, 10);
         assertEquals(10, resultHouse.getBudget());
-    }
-
-    @Test
-    void should_contribute_to_plan(){
-        PlanDto planDto = new PlanDto();
-        planDto.setContribution(100);
-        planDto.setName("name");
-        Inmate inmate = getInmate();
-        House house = getHouse();
-        house.addInmate(inmate);
-        int costLeft = mainService.contribPlan(inmate, planDto);
-        assertEquals(900, costLeft);
     }
 
     @Test
@@ -109,10 +74,9 @@ public class MainTests {
     void should_return_inmate_from_principal(){
         Principal principal = Mockito.mock(Principal.class);
         when(principal.getName()).thenReturn("inmate");
-        Inmate inmate = mainService.getInmateFromPrincipal(principal);
+        Inmate inmate = mainService.getInmate(principal);
         assertEquals(getInmate().getName(), inmate.getName());
     }
-
 
     private Inmate getInmate(){
         Inmate inmate = new Inmate();
@@ -127,12 +91,5 @@ public class MainTests {
         house.setPassword("password");
         house.setBudget(20);
         return house;
-    }
-
-    private Plan getPlan(){
-        Plan plan = new Plan();
-        plan.setName("name");
-        plan.setCost(1000);
-        return plan;
     }
 }

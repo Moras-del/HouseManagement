@@ -6,22 +6,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.moras.models.House;
-import pl.moras.models.Inmate;
-import pl.moras.models.PlanDto;
-import pl.moras.service.MainService;
+import pl.moras.housemanagement.models.House;
+import pl.moras.housemanagement.models.Inmate;
+import pl.moras.housemanagement.models.PlanDto;
+import pl.moras.housemanagement.service.IMainService;
+import pl.moras.housemanagement.service.IPlanService;
+import pl.moras.housemanagement.service.MainService;
 
 import java.security.Principal;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,18 +30,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@DirtiesContext
 public class PlansMvcTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private MainService mainService;
+    private IMainService mainService;
+
+    @MockBean
+    private IPlanService planService;
 
     @Before
     public void setup(){
-        when(mainService.getInmateFromPrincipal(any(Principal.class))).thenReturn(getInmate());
-        when(mainService.contribPlan(any(Inmate.class), any(PlanDto.class))).thenReturn(30);
+        when(mainService.getInmate(any(Principal.class))).thenReturn(getInmate());
+        when(planService.contribPlan(any(Inmate.class), any(PlanDto.class))).thenReturn(30);
     }
 
     @Test

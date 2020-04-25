@@ -2,61 +2,58 @@ package pl.moras.housemanagement;
 
 
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.moras.models.House;
-import pl.moras.models.Inmate;
-import pl.moras.models.PlanDto;
-import pl.moras.security.MyUserDetails;
-import pl.moras.service.MainService;
+import pl.moras.housemanagement.models.House;
+import pl.moras.housemanagement.models.Inmate;
+import pl.moras.housemanagement.models.PlanDto;
+import pl.moras.housemanagement.service.IMainService;
+import pl.moras.housemanagement.service.IPlanService;
+import pl.moras.housemanagement.service.MainService;
 
 import java.security.Principal;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@DirtiesContext
 public class MainMvcTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private MainService mainService;
+    private IMainService mainService;
+
+    @MockBean
+    private IPlanService planService;
 
     @Before
     public void setup(){
-        when(mainService.getInmateFromPrincipal(any(Principal.class))).thenReturn(new Inmate());
+        when(mainService.getInmate(any(Principal.class))).thenReturn(getInmate());
         when(mainService.takeFromBudget(any(Inmate.class), anyInt())).thenReturn(new House());
-        when(mainService.contribPlan(any(Inmate.class), any(PlanDto.class))).thenReturn(0);
+        when(planService.contribPlan(any(Inmate.class), any(PlanDto.class))).thenReturn(0);
 
+    }
+
+    @Test
+    @WithMockUser
+    public void should_show_main_page() throws Exception {
+        mockMvc.perform(get("/main")).andExpect(view().name("mainpage"));
     }
 
     @Test
@@ -79,6 +76,13 @@ public class MainMvcTests {
     @WithMockUser(roles = "HOUSE_ADMIN")
     public void should_reset_expenses() throws Exception {
         mockMvc.perform(post("/main/reset")).andExpect(redirectedUrl("/main"));
+    }
+
+    private Inmate getInmate(){
+        Inmate inmate = new Inmate();
+        inmate.setHouse(new House());
+
+        return inmate;
     }
 
 }
