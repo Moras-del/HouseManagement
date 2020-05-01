@@ -40,7 +40,6 @@ public class AuthMvcTests {
     public void setup(){
         when(authService.addInmate(any(HouseInmateDto.class))).thenReturn(new Inmate());
         when(authService.addHouse(any(HouseInmateDto.class))).thenReturn(new House());
-        when(authService.authenticate(any(HouseInmateDto.class))).thenReturn(true);
     }
 
     @Test

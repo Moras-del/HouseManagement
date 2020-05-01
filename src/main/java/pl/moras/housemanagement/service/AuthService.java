@@ -63,7 +63,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public boolean authenticate(HouseInmateDto houseInmateDto) {
+    public void authenticate(HouseInmateDto houseInmateDto) {
         String houseName = houseInmateDto.getHouseName();
         String housePassword = houseInmateDto.getHousePassword();
         String inmateName = houseInmateDto.getInmateName();
@@ -77,7 +77,6 @@ public class AuthService implements IAuthService {
         UsernamePasswordAuthenticationToken user =
                 new UsernamePasswordAuthenticationToken(inmateName, inmatePassword);
         SecurityContextHolder.getContext().setAuthentication(user);
-        return true;
     }
 
     private House createHouse(String name, String password, Inmate inmate){

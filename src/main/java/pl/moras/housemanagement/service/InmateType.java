@@ -6,7 +6,7 @@ import pl.moras.housemanagement.repos.RoleRepo;
 import java.util.Collections;
 import java.util.List;
 
-enum InmateType implements RoleHandler {
+enum InmateType {
     USER{
         @Override
         public List<Role> getRoles(RoleRepo roleRepo) {
@@ -19,5 +19,7 @@ enum InmateType implements RoleHandler {
             return roleRepo.findAll();
         }
     };
+
+    abstract List<Role> getRoles(RoleRepo roleRepo);
 
 }

@@ -9,5 +9,5 @@ public interface IAuthService {
 
     Inmate addInmate(HouseInmateDto houseInmateDto);
 
-    boolean authenticate(HouseInmateDto houseInmateDto);
+    void authenticate(HouseInmateDto houseInmateDto);
 }
