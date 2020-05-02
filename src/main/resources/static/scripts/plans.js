@@ -54,7 +54,7 @@ $(document).ready(function(){
                "contribution": money
               };
         $.ajax({
-            url         :       "http://localhost:8080/plans",
+            url         :       "plans",
             method      :       "put",
             contentType :       "application/json",
             data        :       JSON.stringify(request),

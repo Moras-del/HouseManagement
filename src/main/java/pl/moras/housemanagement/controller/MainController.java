@@ -27,23 +27,6 @@ public class MainController {
         return "mainpage";
     }
 
-    @PutMapping
-    public ResponseEntity<Map> takeFromBudget(@RequestParam int expenses, Principal principal){
-        Inmate inmate = mainService.getInmate(principal);
-        House house = mainService.takeFromBudget(inmate, expenses);
-        Map<String, Object> response = new HashMap<>();
-        response.put("inmate", inmate.getName());
-        response.put("budget", house.getBudget());
-        response.put("expenses", inmate.getExpenses());
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping(value = "/budget")
-    public ResponseEntity setBudget(@RequestParam int budget, Principal principal){
-        Inmate inmate = mainService.getInmate(principal);
-        mainService.setBudget(inmate.getHouse(), budget);
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping(value = "/reset")
     public String resetExpenses(Principal principal){
@@ -51,8 +34,5 @@ public class MainController {
         mainService.resetExpenses(inmate.getHouse());
         return "redirect:/main";
     }
-
-
-
 
 }

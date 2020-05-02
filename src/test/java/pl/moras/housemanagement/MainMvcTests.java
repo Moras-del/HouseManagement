@@ -57,7 +57,7 @@ public class MainMvcTests {
     @Test
     @WithMockUser
     void should_take_money_from_budget() throws Exception {
-        mockMvc.perform(put("/main")
+        mockMvc.perform(put("/budget/take")
                 .param("expenses", "20"))
                 .andExpect(status().isOk());
     }
@@ -65,7 +65,7 @@ public class MainMvcTests {
     @Test
     @WithMockUser(roles = "HOUSE_ADMIN")
     void should_set_budget() throws Exception {
-        mockMvc.perform(put("/main/budget")
+        mockMvc.perform(put("/budget/set")
                 .param("budget", "200"))
                 .andExpect(status().isOk());
     }

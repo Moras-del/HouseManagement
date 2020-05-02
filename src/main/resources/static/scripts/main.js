@@ -48,7 +48,7 @@ $(document).ready(function(){
 
     function takeFromBudget(value){
         $.ajax({
-            url         :       "http://localhost:8080/main",
+            url         :       "budget/take",
             method      :       "put",
             data        :       {
                 expenses: value
@@ -65,7 +65,7 @@ $(document).ready(function(){
 
     function setNewBudget(newBudget){
             $.ajax({
-                url         :       "http://localhost:8080/main/budget",
+                url         :       "budget/set",
                 method      :       "put",
                 data        :       {
                     budget: newBudget
