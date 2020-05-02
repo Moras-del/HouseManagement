@@ -75,7 +75,7 @@ public class MainTests {
         Principal principal = Mockito.mock(Principal.class);
         when(principal.getName()).thenReturn("inmate");
         Inmate inmate = mainService.getInmate(principal);
-        assertEquals(getInmate().getName(), inmate.getName());
+        assertEquals("inmate", inmate.getName());
     }
 
     private Inmate getInmate(){
