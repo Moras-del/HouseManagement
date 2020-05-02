@@ -2,7 +2,9 @@ package pl.moras.housemanagement;
 
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,8 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@RunWith(SpringRunner.class)
-@DirtiesContext
 public class AuthMvcTests {
 
     @Autowired
@@ -36,36 +36,36 @@ public class AuthMvcTests {
     @MockBean
     private AuthService authService;
 
-    @Before
+    @BeforeEach
     public void setup(){
         when(authService.addInmate(any(HouseInmateDto.class))).thenReturn(new Inmate());
         when(authService.addHouse(any(HouseInmateDto.class))).thenReturn(new House());
     }
 
     @Test
-    public void should_show_register_inmate_page() throws Exception {
+    void should_show_register_inmate_page() throws Exception {
         mockMvc.perform(get("/inmate/register"))
                 .andExpect(view().name("inmateregister"));
     }
     @Test
-    public void should_show_register_house_page() throws Exception {
+    void should_show_register_house_page() throws Exception {
         mockMvc.perform(get("/house/register"))
                 .andExpect(view().name("houseregister"));
     }
     @Test
-    public void should_show_login_inmate_page() throws Exception {
+    void should_show_login_inmate_page() throws Exception {
         mockMvc.perform(get("/inmate/login"))
                 .andExpect(view().name("loginpage"));
     }
 
     @Test
-    public void should_register_house() throws Exception {
+    void should_register_house() throws Exception {
         mockMvc.perform(postRequest("/house/register")).andExpect(redirectedUrl("/main"));
     }
 
 
     @Test
-    public void should_invalid_register_house() throws Exception {
+    void should_invalid_register_house() throws Exception {
         RequestBuilder invalidPost = post("/house/register")
                 .param("inmateName", "user")
                 .param("inmatePassword", "short")
@@ -75,12 +75,12 @@ public class AuthMvcTests {
     }
 
     @Test
-    public void should_register_inmate() throws Exception {
+    void should_register_inmate() throws Exception {
         mockMvc.perform(postRequest("/inmate/register")).andExpect(redirectedUrl("/main"));
     }
 
     @Test
-    public void should_login_inmate() throws Exception {
+    void should_login_inmate() throws Exception {
         mockMvc.perform(postRequest("/inmate/login")).andExpect(redirectedUrl("/main"));
     }
 

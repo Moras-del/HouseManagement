@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collections;
+import java.util.Objects;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "plan")
-public class Plan {
+public class Plan{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,4 +39,5 @@ public class Plan {
         cost -= contribution;
         return cost;
     }
+
 }

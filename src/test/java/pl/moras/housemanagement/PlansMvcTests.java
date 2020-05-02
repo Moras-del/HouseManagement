@@ -1,8 +1,8 @@
 package pl.moras.housemanagement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
-@DirtiesContext
 public class PlansMvcTests {
 
     @Autowired
@@ -42,7 +40,7 @@ public class PlansMvcTests {
     @MockBean
     private IPlanService planService;
 
-    @Before
+    @BeforeEach
     public void setup(){
         when(mainService.getInmate(any(Principal.class))).thenReturn(getInmate());
         when(planService.contribPlan(any(Inmate.class), any(PlanDto.class))).thenReturn(30);

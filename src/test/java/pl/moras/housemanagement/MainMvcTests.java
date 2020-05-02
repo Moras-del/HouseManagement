@@ -1,8 +1,8 @@
 package pl.moras.housemanagement;
 
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@RunWith(SpringRunner.class)
-@DirtiesContext
 public class MainMvcTests {
 
     @Autowired
@@ -42,7 +40,7 @@ public class MainMvcTests {
     @MockBean
     private IPlanService planService;
 
-    @Before
+    @BeforeEach
     public void setup(){
         when(mainService.getInmate(any(Principal.class))).thenReturn(getInmate());
         when(mainService.takeFromBudget(any(Inmate.class), anyInt())).thenReturn(new House());
@@ -52,13 +50,13 @@ public class MainMvcTests {
 
     @Test
     @WithMockUser
-    public void should_show_main_page() throws Exception {
+    void should_show_main_page() throws Exception {
         mockMvc.perform(get("/main")).andExpect(view().name("mainpage"));
     }
 
     @Test
     @WithMockUser
-    public void should_take_money_from_budget() throws Exception {
+    void should_take_money_from_budget() throws Exception {
         mockMvc.perform(put("/main")
                 .param("expenses", "20"))
                 .andExpect(status().isOk());
@@ -66,7 +64,7 @@ public class MainMvcTests {
 
     @Test
     @WithMockUser(roles = "HOUSE_ADMIN")
-    public void should_set_budget() throws Exception {
+    void should_set_budget() throws Exception {
         mockMvc.perform(put("/main/budget")
                 .param("budget", "200"))
                 .andExpect(status().isOk());
@@ -74,7 +72,7 @@ public class MainMvcTests {
 
     @Test
     @WithMockUser(roles = "HOUSE_ADMIN")
-    public void should_reset_expenses() throws Exception {
+    void should_reset_expenses() throws Exception {
         mockMvc.perform(post("/main/reset")).andExpect(redirectedUrl("/main"));
     }
 
