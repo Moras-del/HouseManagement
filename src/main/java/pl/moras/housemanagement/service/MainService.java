@@ -48,8 +48,9 @@ public class MainService implements IMainService {
 
     @Override
     public void resetExpenses(House house) {
-        List<Inmate> list = house.getInmates();
-        list.forEach(inmate -> inmate.setExpenses(0));
+        for (Inmate inmate: house.getInmates()) {
+            inmate.setExpenses(0);
+        }
         houseRepo.save(house);
     }
 }
