@@ -1,9 +1,5 @@
 $(document).ready(function(){
 
-    $('#contrib-plan').click(function(){
-        location.href = "../plans"
-    });
-
     $('#add-expenses').click(function(){
         var budget = $("#budget-value").text()
         $("#modal-budget").text(budget)

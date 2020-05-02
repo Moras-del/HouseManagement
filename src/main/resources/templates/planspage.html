@@ -32,8 +32,9 @@
 
 <button id="addplan_button" class="ui button">Dodaj nowy plan</button>
 <div class="ui hidden divider"></div>
-<button id="return" class="ui button">Powrót</button>
-
+<form class="ui form" method="get" action="#" th:action="@{/main}">
+    <button class="ui button">Powrót</button>
+</form>
 <div class="ui mini modal addplan">
     <form id="addplan_form" action="#" th:action="@{/plans}" method="post" class="ui form" th:object="${planDto}">
         <input name="name" type="text" placeholder="Nazwa planu" th:field="*{name}">

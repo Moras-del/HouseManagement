@@ -71,10 +71,6 @@ $(document).ready(function(){
         })
     }
 
-    $("#return").click(function(){
-        location.replace("/main")
-    })
-
     $('#addplan_form')
             .form({
                 fields: {
