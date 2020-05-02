@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     $('#contrib-plan').click(function(){
-        location.href = "/plans"
+        location.href = "../plans"
     });
 
     $('#add-expenses').click(function(){
